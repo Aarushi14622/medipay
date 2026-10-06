@@ -9,3 +9,5 @@ with open("/var/log/auth.log") as log:
 for ip, total in counts.items():
     if total >= 3:
         print("ALERT:", ip, "failed", total, "times")
+print(undefind_thing)
+
