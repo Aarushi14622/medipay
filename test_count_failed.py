@@ -11,3 +11,9 @@ def test_counts_failed_logins_per_ip():
 
 	assert count_failed_logins(fake_lines) == {"10.0.0.5": 3}
 
+
+def test_no_failures_returns_empty():
+	fake_lines = [
+		"ssh[1]: Accepted publickey for ubuntu from 10.0.0.9 port 4444",
+	]
+	assert count_failed_logins(fake_lines) == {}
