@@ -1,0 +1,15 @@
+name: CI
+ on : [push, pull_request]
+ permissions:
+   contents: read
+
+ jobs:
+   lint: 
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/ checkout@v5
+       - uses: actions/setup-paython@v6
+         with:
+           python-version: "3.12"
+       - run: pip inatall ruff
+       - run: ruff check .
