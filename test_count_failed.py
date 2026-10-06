@@ -1,5 +1,6 @@
 from count_failed import count_failed_logins
 
+
 def test_counts_failed_logins_per_ip():
 	fake_lines = [
 	 "sshd[1]: Invalid user hacker from 10.0.0.5 port 1111",
