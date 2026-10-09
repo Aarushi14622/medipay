@@ -20,6 +20,8 @@ jobs:
      runs-on: ubuntu-latest
      steps:
        - uses: actions/checkout@v5
+         with:
+           fetch-depth: 0
        - run: sudo apt-get update
        - run: sudo apt-get install -y gitleaks
        - run: gitleaks detect --source . --verbose --redact
