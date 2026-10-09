@@ -15,3 +15,13 @@ jobs:
        - run: pip install ruff pytest
        - run: ruff check .
        - run: pytest
+
+   secrets:
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v5
+       - run: sudo apt-get update
+       - run: sudo apt-get install -y gitleaks
+       - run: gitleaks detect --source . --verbose --redact
+
+
