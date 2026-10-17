@@ -48,3 +48,13 @@ jobs:
            python-version: "3.12"
        - run: pip install -r requirements-dev.txt
        - run: pip-audit -r requirements-dev.txt --no-deps --disable-pip
+
+
+   semgrep:
+     runs-on: ubuntu-latest
+     container:
+       image: semgrep/semgrep:X.Y.Z
+     steps:
+       - uses: actions/checkout@v5
+       - run: semgrep scan --config p.python --error --metrics=off
+
