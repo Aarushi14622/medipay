@@ -29,4 +29,22 @@ jobs:
        - run: sudo apt-get install -y gitleaks
        - run: gitleaks detect --source . --verbose --redact
 
+   sast:
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v5
+       - uses: actions/setup-python@v6
+         with:
+           python-version: "3.12"
+       - run: pip install -r requirements-dev.txt
+       - run: bandit -r . -ll
 
+   sca:
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v5
+       - uses: actions/setup-python@v6
+         with:
+           python-version: "3.12"
+       - run: pip install -r requirements-dev.txt
+       - run: pip-audit -r requirements-dev.txt --no-deps --disable-pip
