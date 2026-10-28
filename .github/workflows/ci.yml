@@ -53,7 +53,7 @@ jobs:
    semgrep:
      runs-on: ubuntu-latest
      container:
-       image: semgrep/semgrep:1.181.0
+       image: semgrep/semgrep:1.181.0@sha256:81474464c1f07483ba0682a44787fd93c91397419762a04abe2bafaae396304b
      steps:
        - uses: actions/checkout@v7
        - run: semgrep scan --config p/python --error --metrics=off
@@ -67,6 +67,6 @@ jobs:
        - name: Save the image to a file
          run: docker save medipay:ci -o image.tar
        - name: Scan the image for vulnerabilities
-         run: docker run --rm -v "$PWD:/work" aquasec/trivy:0.70.0 image --input /work/image.tar --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1
+         run: docker run --rm -v "$PWD:/work" aquasec/trivy:0.70.0@sha256:be1190afcb28352bfddc4ddeb71470835d16462af68d310f9f4bca710961a41e image --input /work/image.tar --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1
        - name: Check the Dockerfile for misconfigurations
-         run: docker run --rm -v "$PWD:/work" aquasec/trivy:0.70.0 config --severity HIGH,CRITICAL --exit-code 1 /work
+         run: docker run --rm -v "$PWD:/work" aquasec/trivy:0.70.0@sha256:be1190afcb28352bfddc4ddeb71470835d16462af68d310f9f4bca710961a41e config --severity HIGH,CRITICAL --exit-code 1 /work
