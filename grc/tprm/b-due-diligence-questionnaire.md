@@ -8,7 +8,7 @@ Each question says **why we ask** and **what a good answer looks like**, so a re
 
 | # | Question | Good answer |
 |---|---|---|
-| Q1 | Do you hold **Cyber Essentials** or Cyber Essentials Plus? Give the certificate number | A valid certificate we can check with the Supplier Check Tool or the IASME register ⚠️ verify the lookup route |
+| Q1 | Do you hold **Cyber Essentials** or Cyber Essentials Plus? Give the certificate number | A valid certificate we can check on the [NCSC certificate search](https://iasme.co.uk/cyber-essentials/ncsc-certificate-search/) or in bulk with [IASME Supplier Check](https://supplier.iasme.co.uk/frequently-asked-questions) 🔎 (checked 14 Nov 2026; ⚠️ confirm this is the "Supplier Check Tool" named in the Pledge pack) |
 | Q2 | Who do we contact about a security incident, and how fast will you tell us? | A named role and a 24/7 route, with a notice time in hours, not "promptly" |
 | Q3 | Will any MediPay data leave the UK? | "No", or a named country with a lawful transfer mechanism |
 

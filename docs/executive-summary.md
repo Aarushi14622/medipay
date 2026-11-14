@@ -1,10 +1,10 @@
 # Executive summary: MediPay supply chain security
 
-**As at 14 Nov 2026.** A personal portfolio project about a fictional company. ⚠️ Regulatory statements are only as current as the date shown, and lines marked ⚠️ in the linked documents are still to be verified.
+**As at 14 Nov 2026.** A personal portfolio project about a fictional company. Regulatory statements are only as current as the date shown. Sources are linked in the detailed documents.
 
 ## The problem
 
-MediPay (fictional) processes billing for 12 NHS trusts and about 40 private clinics, using special category health data. It depends on 10 key suppliers, and **six are critical to it**. NHS trusts in turn depend on MediPay. The 2024 Synnovis attack showed what happens when a single, hard-to-replace healthcare supplier is breached ⚠️ (see the source notes in [phase1-context.md](../grc/phase1-context.md)).
+MediPay (fictional) processes billing for 12 NHS trusts and about 40 private clinics, using special category health data. It depends on 10 key suppliers, and **six are critical to it**. NHS trusts in turn depend on MediPay. The 2024 Synnovis attack showed what happens when a single, hard-to-replace healthcare supplier is breached (sources in [phase1-context.md](../grc/phase1-context.md)).
 
 At the same time, UK expectations are rising:
 - The **Cyber Resilience Pledge** asks organisations to make cyber a whole-Board responsibility, sign up to NCSC Early Warning, and audit Cyber Essentials coverage across their suppliers (information pack, April 2026).

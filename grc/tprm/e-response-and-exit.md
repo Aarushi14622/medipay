@@ -9,7 +9,7 @@ Built on the incident response lifecycle (prepare, detect, contain, eradicate, r
 | **1. Detect and confirm** | Supplier notice, NCSC alert, news or our own monitoring. Confirm with the supplier's named contact (C2). Open an incident ticket | Security on call | Hour 0 |
 | **2. Scope** | Which data does this supplier hold (a)? What access does it have? Use the **SBOM** for software suppliers: are we running the affected component? | Security and supplier owner | Hours 0–4 |
 | **3. Contain** | Revoke or rotate credentials and API keys shared with the supplier. Suspend their access (S5: disable admin accounts). Block integrations if needed. For a compromised package or image: pin to the last known good digest, and the **signature verification** will refuse unsigned replacements | Security and Eng | Hours 0–8 |
-| **4. Notify** | Is it a personal data breach? Assess the ICO 72-hour duty ⚠️ verify. Tell NHS customers as their contracts require. Brief the Board | DPO, CISO, legal | Within 72h |
+| **4. Notify** | Is it a personal data breach? If a risk to people is likely, report to the ICO *"without undue delay, but not later than 72 hours after becoming aware of it"*. A processor must tell us without undue delay 🔎 ([ICO guide](https://ico.org.uk/for-organisations/report-a-breach/personal-data-breach/personal-data-breaches-a-guide/)). Tell NHS customers as their contracts require. Brief the Board | DPO, CISO, legal | Within 72h |
 | **5. Continue service** | Activate fallback (see the exit options). Manual processes if needed | Ops | As needed |
 | **6. Recover** | Restore access only after the supplier shows root cause and fix. Re-run due diligence (b) Q11 to Q18 | Security and supplier owner | Days–weeks |
 | **7. Learn** | Post-incident review. Update the tier, contract, monitoring and decision log | CISO | Within 30 days |
@@ -34,6 +34,6 @@ Built on the incident response lifecycle (prepare, detect, contain, eradicate, r
 2. (+2 hours) The NHS trusts' contracts need notice within 24h. Do we notify before CodeRight confirms?
 3. (+1 day) CodeRight says it'll be offline for 2 weeks. Month-end billing is in 5 days.
 
-**Questions:** Who leads? What do we tell the trusts and when? Is this our personal data breach, and when does the ICO clock start? ⚠️ What's the manual fallback, and does it scale? What would we change in (a) to (d)?
+**Questions:** Who leads? What do we tell the trusts and when? Is this our personal data breach, and when does the ICO clock start (when *we* become aware, see the ICO guide)? What's the manual fallback, and does it scale? What would we change in (a) to (d)?
 
 **Success looks like:** decisions logged with times, a holding statement to the trusts within 4 hours, a clear owner for the ICO assessment, and at least three actions fed back into the TPRM process.

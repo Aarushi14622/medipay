@@ -12,6 +12,6 @@ Third-party and supply chain risk management for the fictional MediPay ([scenari
 | (f) | [One-page board brief](f-board-brief.md) | What the Board needs to know, with 5 measures |
 | (g) | [Mapping table](g-mapping.md) | How it all lines up with the Pledge and the Bill |
 
-**Status:** first drafts, written with AI help. The learner reviews each one, and regulatory links in (g) are ⚠️ until checked against the source.
+**Status:** first drafts, written with AI help. The learner reviews each one. Regulatory points were checked against primary sources on 14 Nov 2026 (🔎), and links are given so they can be re-read.
 
 **How the strands connect:** the questions in (b) about SBOMs, signing, pinned dependencies, scanning gates and OIDC are the ones I implemented myself in Days 2 to 7. So I know what a good answer looks like.

@@ -34,5 +34,5 @@ A supplier's tier is set by its **highest** score on any one question. One "high
 ## Observations for the CISO
 
 1. **Six of ten suppliers are tier 1.** That's normal for a small company in health data, but it means due diligence effort must be proportionate (b), or it won't happen.
-2. **S5 HelpDesk Partners is the sleeper risk.** It looks like a low-value contract but has admin access. Many breaches come through managed service providers ⚠️ (find a cited UK example, e.g. from NCSC guidance, before claiming this in an interview).
+2. **S5 HelpDesk Partners is the sleeper risk.** It looks like a low-value contract but has admin access. Example: the NCSC's APT10 advisory says the group targeted *"several global MSPs, giving it extensive access to the networks of organisations worldwide"* 🔎 ([NCSC, Dec 2018](https://www.ncsc.gov.uk/files/APT10%20advisory%20v2.pdf)). The Bill also brings medium and large MSPs into regulation 🔎 (GOV.UK summary, Nov 2026).
 3. **Concentration:** S1 and S6 together hold nearly everything. If either has a regional outage, MediPay stops. See the exit options in (e).
