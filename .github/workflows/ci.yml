@@ -92,9 +92,9 @@ jobs:
        - name: Check the SBOM lists the app's key packages
          run: |
            for pkg in fastapi uvicorn pydantic; do
-             grep -q "\"name\": \"$pkg\"" sbom.cdx.json || { echo "SBOM is missing $pkg"; exit 1; }
+             jq -e --arg p "$pkg" 'any(.components[]; .name == $p)' sbom.cdx.json > /dev/null || { echo "SBOM is missing $pkg"; exit 1; }
            done
-           echo "SBOM contains $(grep -c '"bom-ref"' sbom.cdx.json) components"
+           echo "SBOM contains $(jq '.components | length' sbom.cdx.json) components"
        - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
          with:
            name: sbom

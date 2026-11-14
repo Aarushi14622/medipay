@@ -46,6 +46,7 @@
 - This PR: CI run with all gates green and the `sbom` artifact attached.
 - First push to `main` after merge: the `publish` job log shows "Signature and SBOM attestation verified".
 - While writing this, `pip-audit` caught **CVE-2026-126360** in `opentelemetry-api 1.45.1` (a fastapi dependency) that wasn't known when the lockfile was made. It's bumped to 1.45.2, released 29 Oct 2026 and so over two weeks old as the supplier rule asks.
+- On this PR's first CI run, the Day 1 `image-scan` gate **failed for real**. Fixes had been released for 4 HIGH findings in the base image: `apt` (CVE-2026-109518) and `zlib1g` (CVE-2026-85091 and CVE-2026-76844). It was fixed by moving the base image digest to the 8 Nov 2026 rebuild (which fixes apt) and upgrading `zlib1g` from Debian security until the base image catches up. Lesson: the "accepted, no fix yet" risk from Day 1 was handled automatically once fixes existed. Also, Trivy's title for CVE-2026-76844 describes a webpack bug, not zlib, so scanner data needs checking too.
 
 **Known gaps:**
 - Signing only happens on `main`, so PR builds are unsigned by design.
