@@ -109,3 +109,29 @@
 **Framework mapping:** to do (learner verifies). Candidates: CIS AWS Foundations (S3 sections), UK GDPR Article 32 (security of processing) and international transfer rules for the region policy, NCSC cloud security principle 2 (asset protection).
 
 **Interview line:** "I scan infrastructure before it exists. Checkov covers general best practice, and I wrote our own rules in Rego, like 'London region only' and 'every bucket must be classified'. Every exception is written next to the resource with a reason, so a reviewer can challenge it."
+
+## AWS account baseline as code: OIDC, CloudTrail, guard rails (Days 5 and 6)
+
+**Control:** The AWS account baseline is written as Terraform and scanned in CI by Checkov, Conftest and Trivy. It is **not deployed** (decision D9).
+- **GitHub OIDC:** CI gets short-lived credentials. The trust policy is limited to `repo:Aarushi14622/medipay:ref:refs/heads/main`. There are no stored access keys.
+- **Least privilege:** the CI role can only upload to one S3 prefix.
+- **CloudTrail:** multi-region, global events, KMS-encrypted, log file validation, HTTPS-only bucket, retained for 400 days.
+- **Guard rails:** account-wide S3 public access block, default EBS encryption, a 14-character password policy, and a budget alert at 50% forecast and 100% actual.
+- A runbook gives the safe order for a real account: root MFA, billing alert, no root keys, then apply, then Prowler, then destroy.
+
+**Risk addressed:**
+- Leaked long-lived cloud keys, one of the most common causes of cloud breaches.
+- No audit trail after an incident. Tampered logs.
+- Public data exposure through misconfiguration. Surprise costs.
+
+**Evidence:**
+- This PR's `iac` job: Checkov **131 passed, 0 failed**, 17 skipped with reasons (both Terraform folders). Conftest 45 of 45. Trivy config: 0 HIGH or CRITICAL.
+
+**Known gaps:**
+- Not applied, so there is no Prowler or CIS evidence from a live account. That is honest scope: "designed and scanned, not operated".
+- The trail lives in the same account it audits. Real organisations use a separate log-archive account.
+- No CloudWatch alerting on trail events (cost). Covered as a gap in the continuous monitoring approach.
+
+**Framework mapping:** to do (learner verifies). Candidates: CIS AWS Foundations Benchmark (IAM, logging sections), NCSC Cloud Security Principles 9 to 10 (identity and authentication, operational security), Cyber Essentials (user access control, secure configuration).
+
+**Interview line:** "My pipeline doesn't hold any cloud keys. It swaps a GitHub identity token for 1-hour AWS credentials, and only from the main branch of one repo. When a supplier tells me they 'store keys securely in CI', my next question is why they need stored keys at all."
