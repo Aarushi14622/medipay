@@ -11,6 +11,8 @@
 
 ## 2. "Two real catches in one day" (continuous monitoring)
 
+> ✏️ **Honesty check:** these fixes were made by Claude in PR #21 and reviewed by you. Either tell it that way ("my pipeline caught... I reviewed the fix and the exception") or reproduce it yourself first.
+
 - **Situation:** On 14 Nov 2026 I was adding supply chain controls (hash pinning, SBOM, signing) to the pipeline.
 - **Task:** Get the changes merged with every gate green.
 - **Action:** Two gates failed for real reasons, not because of my change. **pip-audit** flagged a CVE published since my lockfile was built, in a library I'd never heard of (`opentelemetry-api`, pulled in by FastAPI). I checked that the fixed version was over two weeks old (my supplier rule) and bumped it. **Trivy** blocked the merge because fixes had just been released for HIGH vulnerabilities in the base image (apt, zlib), which I'd recorded as "accepted, no fix available" on Day 1. I moved to the rebuilt base image and patched zlib. I logged the exception to my two-week rule (D12): it protects against rushing new versions, not against applying a vendor's own security fixes.
