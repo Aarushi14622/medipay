@@ -4,7 +4,7 @@
 
 ## The point
 
-MediPay depends on **10 key suppliers. Six are tier 1:** if any one of them is breached or fails, patient data or billing is directly at risk. NHS customers depend on us in the same way, and they will ask us the questions we should be asking our suppliers. The 2024 Synnovis attack showed how one supplier's breach can disrupt patient care across a whole area ⚠️ (source to be cited).
+MediPay depends on **10 key suppliers. Six are tier 1:** if any one of them is breached or fails, patient data or billing is directly at risk. NHS customers depend on us in the same way, and they will ask us the questions we should be asking our suppliers. The 2024 Synnovis attack showed how one supplier's breach can disrupt patient care across a whole area: operations were cancelled across south east London, and NHS Blood and Transplant appealed for O-type donors ([NHS England](https://www.england.nhs.uk/london/synnovis-ransomware-cyber-attack/), [NHSBT](https://www.nhsbt.nhs.uk/news/o-positive-and-o-negative-donors-asked-to-urgently-book-appointments-to-give-blood-following-london-hospitals-it-incident/)).
 
 ## What we've done
 

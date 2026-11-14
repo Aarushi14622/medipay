@@ -6,7 +6,7 @@ Signing the contract is the start, not the end. Monitoring is **proportionate to
 
 | Signal | How | Tier | Frequency | Owner |
 |---|---|---|---|---|
-| **Certificate status** (Cyber Essentials, ISO) | Supplier Check Tool or certificate register lookup ⚠️ | 1, 2 | Quarterly (T1), yearly (T2) | GRC analyst |
+| **Certificate status** (Cyber Essentials, ISO) | IASME Supplier Check (bulk CSV search of Cyber Essentials certificates, shows ones expired in the last 12 months) 🔎 | 1, 2 | Quarterly (T1), yearly (T2) | GRC analyst |
 | **Breach news and advisories** | NCSC Early Warning (Pledge action 2), news alerts on supplier names, vendor security advisories | 1 | Continuous | Security team |
 | **Questionnaire refresh** | Re-attestation of (b) | 1, 2, 3 | Yearly, yearly, every 2 years | GRC analyst |
 | **Contract obligations** | Did they notify incidents on time? Did they deliver the SOC 2 report? | 1 | Quarterly review | Supplier owner |

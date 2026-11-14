@@ -1,6 +1,6 @@
 # (g) Mapping: deliverables → Pledge and Bill
 
-> ⚠️ **Every mapping below must be checked against the original text before use.** The Pledge mappings use my verified notes (21 Oct 2026). The Bill mappings are based on the explanatory notes **as introduced** (329-EN). Later amendments may change them, and critical suppliers' duties are left to future regulations.
+> The Pledge mappings use my verified notes (21 Oct 2026). The Bill mappings use the explanatory notes **as introduced** (329-EN) plus the GOV.UK [Summary of the Bill](https://www.gov.uk/government/publications/cyber-security-and-resilience-network-and-information-systems-bill-factsheets/summary-of-the-bill), updated 3 Nov 2026 (🔎 checked by Claude 14 Nov 2026). Critical suppliers' duties are left to future regulations.
 
 ## Cyber Resilience Pledge (as at April 2026 information pack)
 
@@ -16,9 +16,9 @@
 |---|---|---|---|
 | Regulators may designate **critical suppliers** | Keep "designated" separate from "critical to us" | (a) tiering note; [scenario](../scenario.md) designation stance (D11) | ✅ Theme verified. Final criteria ⚠️ |
 | Designation considers **substitutability** and **vector risk** | The same factors we use internally | (a) criteria "substitutability" and "vector" | ✅ |
-| Duties of critical suppliers set by **future regulations** | Can't map precisely yet | (c) C13 regulatory cooperation clause | ⚠️ Uncertain by design |
-| Incident reporting for in-scope entities ⚠️ verify the timings in the latest version | Our NHS customers may need fast notice from us | (c) C2 24-hour notice; (e) notify phase | ⚠️ Verify |
-| Supply chain duties for OES ⚠️ verify | NHS customers will push requirements down to us | (b) tier 1 questions; (c) contract | ⚠️ Verify |
+| Duties of critical suppliers set by **future regulations** | Can't map precisely yet | (c) C13 regulatory cooperation clause | Uncertain by design: secondary legislation 🔎 |
+| Incident reporting: *"initial notification within 24 hours and a fuller report within 72 hours"*, set in secondary legislation | Our NHS customers may need fast notice from us to meet their own 24 hours | (c) C2 24-hour notice; (e) notify phase | 🔎 GOV.UK summary |
+| Supply chain risk for operators of essential services (health is an OES sector) | NHS customers will push requirements down to us | (b) tier 1 questions; (c) contract | ⚠️ The GOV.UK summary doesn't set out specific OES supply chain duties. Check the latest explanatory notes |
 
 ## What's uncertain (say this in interviews)
 

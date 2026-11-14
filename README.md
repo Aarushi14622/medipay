@@ -60,7 +60,7 @@ Every control has a **control card** in [`grc/controls.md`](grc/controls.md): th
 | `.github/workflows/ci.yml` | All the gates |
 | `k8s/`, `policies/kyverno/` | Kubernetes manifests and admission policies |
 | `terraform/`, `policies/conftest/` | Infrastructure as code and our Rego rules |
-| `docs/` | [Threat model](docs/threat-model.md), [executive summary](docs/executive-summary.md), [portfolio and AI note](docs/portfolio.md), [STAR stories](docs/star-stories.md), [LinkedIn draft](docs/linkedin-post.md) |
+| `docs/` | [Threat model](docs/threat-model.md), [executive summary](docs/executive-summary.md), [portfolio and AI note](docs/portfolio.md), [STAR stories](docs/star-stories.md) |
 | `grc/` | [Control cards](grc/controls.md), [decision log](grc/decision-log.md), [UK context](grc/phase1-context.md), [scenario](grc/scenario.md), [TPRM deliverables](grc/tprm/) |
 
 ## Run it locally
