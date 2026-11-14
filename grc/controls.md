@@ -82,3 +82,30 @@
 **Framework mapping:** to do (learner verifies). Candidates: CIS Kubernetes Benchmark (5.2 Pod Security, 5.3 Network Policies), NCSC cloud security principles (separation between users), least privilege.
 
 **Interview line:** "The pipeline checks the image, and the cluster checks again. I wrote Kyverno policies that refuse root containers, untrusted registries and unsigned images, and CI proves each policy actually blocks a bad manifest."
+
+## Infrastructure as Code scanning: Checkov and Conftest (Day 4)
+
+**Control:** Cloud infrastructure is written as Terraform and scanned on every PR, before anything exists.
+- `terraform fmt` and `validate` must pass.
+- **Checkov** (general best practice) must report 0 failed checks. Every skipped check is written next to its resource with a reason.
+- **Conftest** runs MediPay's own Rego rules: **London region only** (UK data residency), every bucket has a valid `data_classification`, public access fully blocked, no public ACLs. Each rule has a unit test.
+- CI proves the gate works: a broken-on-purpose example (US region, unclassified bucket) **must** fail.
+- First resource: an audit evidence bucket that is private, KMS-encrypted with key rotation, versioned, access-logged and HTTPS only.
+
+**Risk addressed:**
+- Misconfigured cloud storage (public buckets are a classic cause of health data leaks).
+- Health data leaving the UK by accident.
+- Unlabelled data that nobody knows how to protect.
+- Evidence that can be quietly changed or deleted (versioning and access logs).
+
+**Evidence:**
+- This PR's `iac` job: Checkov 51 passed, 0 failed, 9 skipped with reasons. Conftest unit tests 7 of 7 passed. Conftest on our Terraform 20 of 20 passed. The bad example was blocked.
+
+**Known gaps:**
+- Nothing is deployed to real AWS (decision log). LocalStack is optional.
+- `.terraform.lock.hcl` (the provider's "lockfile" with hashes) isn't committed yet. The cloud environment couldn't reach the Terraform registry. Run `terraform init` once on the VM and commit it, the same lesson as hash-pinning Python.
+- Scanners only see code. Console changes (drift) need a different control, such as AWS Config or Prowler on a live account.
+
+**Framework mapping:** to do (learner verifies). Candidates: CIS AWS Foundations (S3 sections), UK GDPR Article 32 (security of processing) and international transfer rules for the region policy, NCSC cloud security principle 2 (asset protection).
+
+**Interview line:** "I scan infrastructure before it exists. Checkov covers general best practice, and I wrote our own rules in Rego, like 'London region only' and 'every bucket must be classified'. Every exception is written next to the resource with a reason, so a reviewer can challenge it."

@@ -160,3 +160,41 @@ jobs:
          run: ./kyverno test policies/kyverno/tests
        - name: Real manifests comply with the policies
          run: ./kyverno apply policies/kyverno/disallow-root.yaml policies/kyverno/require-pinned-trusted-images.yaml --resource k8s/deployment.yaml
+
+   iac:
+     # Infrastructure as Code scanning (Day 4): Terraform must be valid,
+     # pass Checkov (general best practice) and Conftest (MediPay's own rules).
+     runs-on: ubuntu-latest
+     env:
+       TF_IMAGE: hashicorp/terraform:1.17.0@sha256:4d1b496a256f2989bccdb04b9104a4ede97234b10fba90259e173e905ec4fb58
+       CHECKOV_IMAGE: bridgecrew/checkov:3.3.30@sha256:4b65e89f1fde292249fc0aa0d0db43302c036dfe39f7370b2d3517571082b894
+       CONFTEST_VERSION: 0.71.1
+       CONFTEST_SHA256: c3f6b2a753bd56e377a1e51a95ae3e057f926f2e9139f7d5b5dfbbaf810f7985
+     steps:
+       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+       - name: Terraform format check
+         run: docker run --rm -v "$PWD:/w" -w /w "$TF_IMAGE" fmt -check -recursive -diff terraform
+       - name: Terraform validate (no backend, no credentials)
+         run: |
+           for dir in terraform/*/; do
+             echo "== $dir"
+             docker run --rm -v "$PWD:/w" -w "/w/$dir" "$TF_IMAGE" init -backend=false -input=false > /dev/null
+             docker run --rm -v "$PWD:/w" -w "/w/$dir" "$TF_IMAGE" validate
+           done
+       - name: Checkov scan
+         run: docker run --rm -v "$PWD:/w" "$CHECKOV_IMAGE" -d /w/terraform --framework terraform --compact --quiet --skip-download
+       - name: Install Conftest (pinned version, checksum verified)
+         run: |
+           curl -sSL -o conftest.tgz "https://github.com/open-policy-agent/conftest/releases/download/v${CONFTEST_VERSION}/conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz"
+           echo "${CONFTEST_SHA256}  conftest.tgz" | sha256sum --check
+           tar xzf conftest.tgz conftest
+       - name: Conftest policy unit tests
+         run: ./conftest verify --policy policies/conftest
+       - name: Conftest on our Terraform
+         run: ./conftest test --parser hcl2 --policy policies/conftest terraform/*/*.tf
+       - name: Conftest must FAIL the broken-on-purpose example
+         run: |
+           if ./conftest test --parser hcl2 --policy policies/conftest policies/conftest/examples/bad-bucket.tf; then
+             echo "Policy did not catch the bad example: the gate is broken"; exit 1
+           fi
+           echo "Bad example blocked as expected"
