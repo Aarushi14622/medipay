@@ -1,0 +1,34 @@
+# Images must come from our own registry and be pinned by digest, so what was
+# scanned and signed is exactly what runs.
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-pinned-trusted-images
+  annotations:
+    policies.kyverno.io/title: Images must be ours and pinned by digest
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: trusted-registry
+      match:
+        any:
+          - resources:
+              kinds: ["Pod"]
+      validate:
+        message: "Images must come from ghcr.io/aarushi14622/."
+        pattern:
+          spec:
+            containers:
+              - image: "ghcr.io/aarushi14622/*"
+    - name: pinned-by-digest
+      match:
+        any:
+          - resources:
+              kinds: ["Pod"]
+      validate:
+        message: "Images must be pinned by digest (@sha256:...), not by tag."
+        pattern:
+          spec:
+            containers:
+              - image: "*@sha256:*"

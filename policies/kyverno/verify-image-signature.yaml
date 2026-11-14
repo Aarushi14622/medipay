@@ -1,0 +1,29 @@
+# Only run images signed by THIS repo's CI on main (Cosign keyless, Day 2).
+# Not covered by the offline CI test: checking a signature needs the real
+# registry and Sigstore. Test it in a kind cluster (see k8s/README.md).
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: verify-image-signature
+  annotations:
+    policies.kyverno.io/title: Images must be signed by MediPay CI
+spec:
+  validationFailureAction: Enforce
+  webhookTimeoutSeconds: 30
+  rules:
+    - name: signed-by-medipay-ci
+      match:
+        any:
+          - resources:
+              kinds: ["Pod"]
+      verifyImages:
+        - imageReferences: ["ghcr.io/aarushi14622/medipay*"]
+          mutateDigest: false
+          verifyDigest: true
+          attestors:
+            - entries:
+                - keyless:
+                    subject: "https://github.com/Aarushi14622/medipay/.github/workflows/ci.yml@refs/heads/main"
+                    issuer: "https://token.actions.githubusercontent.com"
+                    rekor:
+                      url: https://rekor.sigstore.dev

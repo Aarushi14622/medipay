@@ -141,3 +141,22 @@ jobs:
            cosign verify "$REF" --certificate-identity "$ID" --certificate-oidc-issuer https://token.actions.githubusercontent.com > /dev/null
            cosign verify-attestation "$REF" --type cyclonedx --certificate-identity "$ID" --certificate-oidc-issuer https://token.actions.githubusercontent.com > /dev/null
            echo "Signature and SBOM attestation verified for $REF"
+
+   k8s-policy:
+     # Policy as Code (Day 3): Kyverno policies must pass the good manifest
+     # and fail the broken-on-purpose ones; the real manifests must pass.
+     runs-on: ubuntu-latest
+     env:
+       KYVERNO_VERSION: v1.19.2
+       KYVERNO_SHA256: 357eaf1df8bc24ddd5a73979fadeaae6a032e8710f11af264229756e4956bf4a
+     steps:
+       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+       - name: Install the Kyverno CLI (pinned version, checksum verified)
+         run: |
+           curl -sSL -o kyverno.tgz "https://github.com/kyverno/kyverno/releases/download/${KYVERNO_VERSION}/kyverno-cli_${KYVERNO_VERSION}_linux_x86_64.tar.gz"
+           echo "${KYVERNO_SHA256}  kyverno.tgz" | sha256sum --check
+           tar xzf kyverno.tgz kyverno
+       - name: Policy unit tests (good passes, bad fails)
+         run: ./kyverno test policies/kyverno/tests
+       - name: Real manifests comply with the policies
+         run: ./kyverno apply policies/kyverno/disallow-root.yaml policies/kyverno/require-pinned-trusted-images.yaml --resource k8s/deployment.yaml

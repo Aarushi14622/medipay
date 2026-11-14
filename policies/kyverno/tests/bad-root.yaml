@@ -1,0 +1,11 @@
+# Broken on purpose: no runAsNonRoot, privilege escalation allowed.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bad-root
+spec:
+  containers:
+    - name: app
+      image: ghcr.io/aarushi14622/medipay@sha256:0000000000000000000000000000000000000000000000000000000000000000
+      securityContext:
+        allowPrivilegeEscalation: true

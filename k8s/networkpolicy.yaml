@@ -1,0 +1,25 @@
+# Default deny: nothing in the namespace can send or receive traffic...
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: medipay
+spec:
+  podSelector: {}
+  policyTypes: ["Ingress", "Egress"]
+---
+# ...except traffic to the API on port 8000. The app needs no outbound access.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-to-patients
+  namespace: medipay
+spec:
+  podSelector:
+    matchLabels:
+      app: patients
+  policyTypes: ["Ingress"]
+  ingress:
+    - ports:
+        - port: 8000
+          protocol: TCP

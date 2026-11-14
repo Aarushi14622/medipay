@@ -1,0 +1,13 @@
+# Broken on purpose: public registry and a movable tag.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bad-image
+spec:
+  securityContext:
+    runAsNonRoot: true
+  containers:
+    - name: app
+      image: python:3.12-slim
+      securityContext:
+        allowPrivilegeEscalation: false

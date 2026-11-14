@@ -56,3 +56,29 @@
 **Framework mapping:** to do (learner verifies). Candidates: NCSC supply chain principles (understand what's in what you supply), the Pledge action 3 on suppliers, NIST SSDF PS.2 and PS.3.
 
 **Interview line:** "I pinned every action, image and package so nothing can change under us. I made an SBOM for every build and signed images keylessly with Cosign. When I ask a supplier for an SBOM or signed releases, I know what a good answer looks like, because I've produced one."
+
+## Kubernetes admission policies with Kyverno (Day 3)
+
+**Control:** The cluster refuses pods that break our rules, and the rules are code reviewed in PRs (**Policy as Code**).
+- `disallow-root`: pods must set `runAsNonRoot` and must not allow privilege escalation.
+- `require-pinned-trusted-images`: images only from `ghcr.io/aarushi14622/`, only by digest.
+- `verify-image-signature`: images must carry a Cosign signature from this repo's CI on `main`.
+- Manifests follow least privilege: no service account token, no RBAC permissions, read-only filesystem, all capabilities dropped, default-deny NetworkPolicy.
+- CI job `k8s-policy` proves each policy **passes good and fails bad** manifests on every PR.
+
+**Risk addressed:**
+- Someone deploys a root container or a random public image straight to the cluster and skips the pipeline.
+- A compromised pod uses its API token or open network to move sideways (lateral movement).
+
+**Evidence:**
+- This PR's `k8s-policy` job: 8 policy tests pass, including 4 that **expect a block** (`bad-root`, `bad-image`).
+- `kyverno apply` against `k8s/deployment.yaml`: pass 4, fail 0.
+
+**Known gaps:**
+- The signature policy isn't tested in CI because it needs the live registry. Test it in kind (`k8s/README.md`).
+- No real cluster runs continuously. This is a local lab, not production.
+- Kyverno's `ClusterPolicy` API is deprecated in favour of the newer CEL policy types. It still works in 1.19, but should be migrated later.
+
+**Framework mapping:** to do (learner verifies). Candidates: CIS Kubernetes Benchmark (5.2 Pod Security, 5.3 Network Policies), NCSC cloud security principles (separation between users), least privilege.
+
+**Interview line:** "The pipeline checks the image, and the cluster checks again. I wrote Kyverno policies that refuse root containers, untrusted registries and unsigned images, and CI proves each policy actually blocks a bad manifest."
