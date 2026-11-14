@@ -198,3 +198,30 @@ jobs:
              echo "Policy did not catch the bad example: the gate is broken"; exit 1
            fi
            echo "Bad example blocked as expected"
+
+   dast:
+     # Dynamic testing (Day 7): run the real container and attack it with
+     # OWASP ZAP's API scan, driven by the app's own OpenAPI description.
+     # Any WARN or FAIL blocks the merge.
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+       - name: Build and start the app container
+         run: |
+           docker build -t medipay:ci .
+           docker run -d --name app -p 8000:8000 medipay:ci
+           for i in $(seq 1 30); do curl -sf http://localhost:8000/health && exit 0; sleep 2; done
+           docker logs app; exit 1
+       - name: ZAP API scan
+         run: |
+           mkdir -p zap && chmod 777 zap
+           docker run --rm --network host -v "$PWD/zap:/zap/wrk:rw" \
+             zaproxy/zap-stable:2.16.1@sha256:7840969c7c9fead565bf9734b12f49f6886db90b1d35b1f74d79710bbd081dab \
+             zap-api-scan.py -t http://localhost:8000/openapi.json -f openapi \
+             -r zap-report.html -w zap-report.md -z "-config api.disablekey=true"
+       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+         if: always()
+         with:
+           name: zap-report
+           path: zap/zap-report.*
+           retention-days: 90

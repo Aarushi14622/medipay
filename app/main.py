@@ -2,10 +2,25 @@
 
 from datetime import date
 
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, Request, status
 from pydantic import BaseModel, ConfigDict, Field
 
 app = FastAPI(title="MediPay Patients", version="0.1.0")
+
+# Added after the Day 7 ZAP scan flagged "X-Content-Type-Options Header Missing".
+SECURITY_HEADERS = {
+    "X-Content-Type-Options": "nosniff",  # browsers must not guess content types
+    "Cache-Control": "no-store",  # patient data must not sit in caches
+    "X-Frame-Options": "DENY",  # can't be embedded in another site (clickjacking)
+    "Referrer-Policy": "no-referrer",
+}
+
+
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers.update(SECURITY_HEADERS)
+    return response
 
 
 class PatientIn(BaseModel):
