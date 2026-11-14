@@ -45,3 +45,10 @@ def test_security_headers_present():
     r = client.get("/patients/99999")
     assert r.headers["X-Content-Type-Options"] == "nosniff"
     assert r.headers["Cache-Control"] == "no-store"
+
+
+def test_site_isolation_headers_present():
+    # ZAP rule 90004 (Spectre site isolation) flagged these in CI (Day 7).
+    r = client.get("/health")
+    assert r.headers["Cross-Origin-Resource-Policy"] == "same-origin"
+    assert r.headers["Cross-Origin-Embedder-Policy"] == "require-corp"

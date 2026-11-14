@@ -147,6 +147,7 @@
 **Evidence:**
 - First local ZAP run: **WARN-NEW: X-Content-Type-Options Header Missing [10021]**. 🛠️ The dev team fix is security headers middleware (`nosniff`, `Cache-Control: no-store`, `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer`), plus a security regression test.
 - Rerun: **0 FAIL, 0 WARN, 106 PASS**. This PR's `dast` job and its `zap-report` artifact.
+- In CI, ZAP downloads newer rules and found two more warnings. **Spectre site isolation [90004]** was fixed with `Cross-Origin-Resource-Policy`, `-Opener-Policy` and `-Embedder-Policy` headers, plus a test. **ZAP is Out of Date [10116]** is ignored in `.zap/rules.tsv` with a reason, because we pin ZAP on purpose. Lesson: an unpinned rule set means the same scanner version can give different results on different days.
 - Threat model: 3 open risks ranked, each with a planned fix.
 
 **Known gaps:**
