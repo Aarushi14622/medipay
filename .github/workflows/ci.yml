@@ -70,8 +70,8 @@ jobs:
          run: docker save medipay:ci -o image.tar
        - name: Scan the image for vulnerabilities
          run: docker run --rm -v "$PWD:/work" aquasec/trivy:0.70.0@sha256:be1190afcb28352bfddc4ddeb71470835d16462af68d310f9f4bca710961a41e image --input /work/image.tar --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1
-       - name: Check the Dockerfile for misconfigurations
-         run: docker run --rm -v "$PWD:/work" aquasec/trivy:0.70.0@sha256:be1190afcb28352bfddc4ddeb71470835d16462af68d310f9f4bca710961a41e config --severity HIGH,CRITICAL --exit-code 1 /work
+       - name: Check Dockerfile, Kubernetes and Terraform for misconfigurations (policy test fixtures are bad on purpose, so skipped)
+         run: docker run --rm -v "$PWD:/work" aquasec/trivy:0.70.0@sha256:be1190afcb28352bfddc4ddeb71470835d16462af68d310f9f4bca710961a41e config --severity HIGH,CRITICAL --exit-code 1 --skip-dirs /work/policies /work
 
    sbom:
      # SBOM = the "ingredients list" of the image. Made on every PR so a
