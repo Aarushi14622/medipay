@@ -138,6 +138,8 @@ resource "aws_s3_bucket_versioning" "access_logs" {
   }
 }
 
+# S3 server access logging only delivers to buckets using SSE-S3 (AES256), not KMS.
+#trivy:ignore:AWS-0132
 resource "aws_s3_bucket_server_side_encryption_configuration" "access_logs" {
   bucket = aws_s3_bucket.access_logs.id
   rule {
