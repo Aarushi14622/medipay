@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: patients
+  namespace: medipay
+  labels:
+    app: patients
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: patients
+  template:
+    metadata:
+      labels:
+        app: patients
+    spec:
+      serviceAccountName: patients
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: patients
+          # Replace the digest with the one printed by CI's publish job.
+          image: ghcr.io/aarushi14622/medipay@sha256:0000000000000000000000000000000000000000000000000000000000000000
+          ports:
+            - containerPort: 8000
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000

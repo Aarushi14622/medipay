@@ -1,0 +1,55 @@
+# Run: kyverno test policies/kyverno/tests
+# Each policy must PASS the good manifest and FAIL the broken ones.
+# "A check you've never seen fail is a check you can't trust."
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: medipay-policies
+policies:
+  - ../disallow-root.yaml
+  - ../require-pinned-trusted-images.yaml
+resources:
+  - good-deployment.yaml
+  - bad-root.yaml
+  - bad-image.yaml
+results:
+  - policy: disallow-root
+    rule: autogen-run-as-non-root
+    kind: Deployment
+    resources: [good]
+    result: pass
+  - policy: disallow-root
+    rule: autogen-no-privilege-escalation
+    kind: Deployment
+    resources: [good]
+    result: pass
+  - policy: disallow-root
+    rule: run-as-non-root
+    kind: Pod
+    resources: [bad-root]
+    result: fail
+  - policy: disallow-root
+    rule: no-privilege-escalation
+    kind: Pod
+    resources: [bad-root]
+    result: fail
+  - policy: require-pinned-trusted-images
+    rule: autogen-trusted-registry
+    kind: Deployment
+    resources: [good]
+    result: pass
+  - policy: require-pinned-trusted-images
+    rule: autogen-pinned-by-digest
+    kind: Deployment
+    resources: [good]
+    result: pass
+  - policy: require-pinned-trusted-images
+    rule: trusted-registry
+    kind: Pod
+    resources: [bad-image]
+    result: fail
+  - policy: require-pinned-trusted-images
+    rule: pinned-by-digest
+    kind: Pod
+    resources: [bad-image]
+    result: fail

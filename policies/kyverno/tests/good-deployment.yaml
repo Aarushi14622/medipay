@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: good
+spec:
+  selector:
+    matchLabels: {app: good}
+  template:
+    metadata:
+      labels: {app: good}
+    spec:
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: app
+          image: ghcr.io/aarushi14622/medipay@sha256:0000000000000000000000000000000000000000000000000000000000000000
+          securityContext:
+            allowPrivilegeEscalation: false
