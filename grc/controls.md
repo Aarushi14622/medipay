@@ -135,3 +135,25 @@
 **Framework mapping:** to do (learner verifies). Candidates: CIS AWS Foundations Benchmark (IAM, logging sections), NCSC Cloud Security Principles 9 to 10 (identity and authentication, operational security), Cyber Essentials (user access control, secure configuration).
 
 **Interview line:** "My pipeline doesn't hold any cloud keys. It swaps a GitHub identity token for 1-hour AWS credentials, and only from the main branch of one repo. When a supplier tells me they 'store keys securely in CI', my next question is why they need stored keys at all."
+
+## Dynamic testing (ZAP) and STRIDE threat model (Day 7)
+
+**Control:** Every PR starts the real container and scans it with **OWASP ZAP's API scan**, driven by the app's OpenAPI description. Any warning or failure blocks the merge. A **STRIDE threat model** (`docs/threat-model.md`) covers the design flaws a scanner can't see.
+
+**Risk addressed:**
+- Runtime issues that code scanners miss, such as missing security headers or error pages that leak details.
+- Design flaws: no authentication, guessable IDs, no per-user audit trail.
+
+**Evidence:**
+- First local ZAP run: **WARN-NEW: X-Content-Type-Options Header Missing [10021]**. 🛠️ The dev team fix is security headers middleware (`nosniff`, `Cache-Control: no-store`, `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer`), plus a security regression test.
+- Rerun: **0 FAIL, 0 WARN, 106 PASS**. This PR's `dast` job and its `zap-report` artifact.
+- In CI, ZAP downloads newer rules and found two more warnings. **Spectre site isolation [90004]** was fixed with `Cross-Origin-Resource-Policy`, `-Opener-Policy` and `-Embedder-Policy` headers, plus a test. **ZAP is Out of Date [10116]** is ignored in `.zap/rules.tsv` with a reason, because we pin ZAP on purpose. Lesson: an unpinned rule set means the same scanner version can give different results on different days.
+- Threat model: 3 open risks ranked, each with a planned fix.
+
+**Known gaps:**
+- ZAP runs without authentication, because the app has none. Once auth exists, the scan needs a logged-in context.
+- The top three risks (auth, predictable IDs, audit log) are **open and accepted** for synthetic data only.
+
+**Framework mapping:** to do (learner verifies). Candidates: OWASP ASVS (V14 configuration, V4 access control), OWASP API Security Top 10 (API1 broken object level authorisation, API2 broken authentication), NCSC secure development principles.
+
+**Interview line:** "With my DAST background, I wired ZAP into CI as a merge gate. It found a missing header, and we fixed it with a regression test. Then my threat model found what ZAP couldn't: there's no authentication and IDs are guessable. Scanners find bug patterns, and threat models find design flaws. A supplier needs both."

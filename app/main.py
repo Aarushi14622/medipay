@@ -2,10 +2,33 @@
 
 from datetime import date
 
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, Request, status
 from pydantic import BaseModel, ConfigDict, Field
 
 app = FastAPI(title="MediPay Patients", version="0.1.0")
+
+# Added after the Day 7 ZAP scan flagged "X-Content-Type-Options Header Missing".
+SECURITY_HEADERS = {
+    "X-Content-Type-Options": "nosniff",  # browsers must not guess content types
+    "Cache-Control": "no-store",  # patient data must not sit in caches
+    "X-Frame-Options": "DENY",  # can't be embedded in another site (clickjacking)
+    "Referrer-Policy": "no-referrer",
+    # Site isolation (ZAP rule 90004, Spectre): keep other origins out.
+    "Cross-Origin-Resource-Policy": "same-origin",
+    "Cross-Origin-Opener-Policy": "same-origin",
+}
+
+# The interactive docs load Swagger UI from a CDN, which COEP would block.
+DOCS_PATHS = ("/docs", "/redoc")
+
+
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers.update(SECURITY_HEADERS)
+    if not request.url.path.startswith(DOCS_PATHS):
+        response.headers["Cross-Origin-Embedder-Policy"] = "require-corp"
+    return response
 
 
 class PatientIn(BaseModel):

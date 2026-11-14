@@ -38,3 +38,17 @@ def test_rejects_unknown_fields():
 def test_rejects_bad_member_id():
     r = client.post("/patients", json={**VALID, "member_id": "1234"})
     assert r.status_code == 422
+
+
+def test_security_headers_present():
+    # Security regression test: ZAP flagged the missing nosniff header (Day 7).
+    r = client.get("/patients/99999")
+    assert r.headers["X-Content-Type-Options"] == "nosniff"
+    assert r.headers["Cache-Control"] == "no-store"
+
+
+def test_site_isolation_headers_present():
+    # ZAP rule 90004 (Spectre site isolation) flagged these in CI (Day 7).
+    r = client.get("/health")
+    assert r.headers["Cross-Origin-Resource-Policy"] == "same-origin"
+    assert r.headers["Cross-Origin-Embedder-Policy"] == "require-corp"
